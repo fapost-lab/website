@@ -1,8 +1,12 @@
 {
   // Static-assets-only Worker: there is no server-side code, so no `main` entry.
   // Everything under public/ is uploaded and served straight from the edge.
+  //
+  // The name must match the Worker the custom domain is attached to. Cloudflare
+  // named it after the repository when the project was created; a different name
+  // here would deploy to a second, unrouted Worker.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "fapost-website",
+  "name": "website",
   "compatibility_date": "2026-08-27",
   "assets": {
     "directory": "./public",
