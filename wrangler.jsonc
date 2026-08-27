@@ -1,0 +1,11 @@
+{
+  // Static-assets-only Worker: there is no server-side code, so no `main` entry.
+  // Everything under public/ is uploaded and served straight from the edge.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fapost-website",
+  "compatibility_date": "2026-08-27",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  }
+}
