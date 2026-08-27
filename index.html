@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FaPost — open-source communication automation</title>
+<meta name="description" content="Open-source platform for building intelligent bots and automating multichannel business communication. Visual flow builder, self-hosted, Apache 2.0.">
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fapost.in/">
+<meta property="og:title" content="FaPost — open-source communication automation">
+<meta property="og:description" content="Build intelligent bots and automate multichannel communication without writing code. Self-hosted, Apache 2.0.">
+<meta property="og:image" content="https://fapost.in/assets/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="canonical" href="https://fapost.in/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Victor+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+
+  /* Single-theme by intent: the mark lives on near-black, and the marketing
+     identity in app.css is a dark surface with an indigo-violet accent. Every
+     colour is painted explicitly so the page holds on any host ground. */
+  :root {
+    --ground:    #0a0814;
+    --raised:    #12101f;
+    --raised-2:  #191527;
+    --line:      #241f38;
+    --line-2:    #322b4a;
+
+    --ink:       #efedf7;
+    --ink-2:     #a09cba;
+    --ink-3:     #6c6885;
+
+    --brand:     #6366f1;
+    --brand-2:   #a855f7;
+    --accent:    #f97316;
+
+    /* the builder panel keeps the product's own warm-minimal palette */
+    --ui-bg:     #f5f4f1;
+    --ui-panel:  #ffffff;
+    --ui-line:   #e8e5e0;
+    --ui-ink:    #1c1917;
+    --ui-ink-2:  #6b6560;
+    --ui-ink-3:  #a09b94;
+    --ui-sage:   #8fa897;
+    --ui-sky:    #6888a8;   --ui-sky-bg:   #eaf0f6;
+    --ui-amber:  #b08040;   --ui-amber-bg: #f5f0e6;
+    --ui-moss:   #7d8a70;   --ui-moss-bg:  #eef2ee;
+
+    --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "Victor Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --measure: 62ch;
+    --pad: clamp(1.25rem, 5vw, 3rem);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1120px; margin-inline: auto; padding-inline: var(--pad); }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: inherit; }
+
+  h1 { font-size: clamp(2.9rem, 8vw, 5.4rem); font-weight: 700; letter-spacing: -0.04em; line-height: 0.98; }
+  h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 700; letter-spacing: -0.028em; line-height: 1.1; }
+  h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+
+  code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.73rem; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .grad {
+    background: linear-gradient(96deg, var(--brand) 0%, var(--brand-2) 62%, var(--accent) 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+  }
+
+  :focus-visible { outline: 2px solid var(--brand-2); outline-offset: 3px; border-radius: 5px; }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1.5rem; padding-block: 1.5rem; flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em; text-decoration: none; }
+  .masthead nav { display: flex; align-items: center; gap: 1.6rem; font-size: 0.94rem; }
+  .masthead nav a { color: var(--ink-2); text-decoration: none; transition: color .15s ease; }
+  .masthead nav a:hover { color: var(--ink); }
+
+  /* ---------- hero ---------- */
+
+  .hero { padding-block: clamp(2.5rem, 8vw, 5.5rem) clamp(2rem, 5vw, 3rem); }
+
+  .hero h1 span { display: block; }
+
+  .hero-sub {
+    margin-top: 1.7rem; max-width: var(--measure);
+    font-size: clamp(1.05rem, 2vw, 1.2rem); color: var(--ink-2);
+  }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.1rem; align-items: center; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.3rem; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 500; text-decoration: none;
+    border: 1px solid transparent; transition: transform .15s ease, border-color .15s ease, background-color .15s ease;
+  }
+  .btn-primary { background: linear-gradient(96deg, var(--brand), var(--brand-2)); color: #fff; }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-ghost { border-color: var(--line-2); color: var(--ink); background: var(--raised); }
+  .btn-ghost:hover { border-color: var(--brand-2); }
+
+  .soon {
+    font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.18rem 0.45rem; border-radius: 4px;
+    background: rgba(249,115,22,.14); color: var(--accent); border: 1px solid rgba(249,115,22,.3);
+  }
+
+  /* ---------- builder mock ---------- */
+
+  .builder {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    border: 1px solid var(--line-2); border-radius: 14px;
+    background: var(--ui-bg); overflow: hidden;
+    box-shadow: 0 24px 70px -30px rgba(99,102,241,.5);
+  }
+  .builder-scroll { overflow-x: auto; }
+  .builder-grid { display: grid; grid-template-columns: 232px 1fr; min-width: 760px; }
+
+  .panel-head {
+    background: var(--ui-sage); color: #fff;
+    font-family: var(--font-mono); font-size: .7rem; font-weight: 500;
+    letter-spacing: .16em; padding: .7rem 1rem;
+  }
+
+  .structure { border-right: 1px solid var(--ui-line); background: var(--ui-panel); }
+  .tree { padding: .8rem .6rem; display: flex; flex-direction: column; gap: .1rem; font-size: .8rem; color: var(--ui-ink); }
+  .tw { display: flex; align-items: center; gap: .5rem; padding: .32rem .5rem; border-radius: 5px; }
+  .tw .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ui-ink-3); flex: none; }
+  .tw--sub { padding-left: 1.5rem; color: var(--ui-ink-2); font-size: .76rem; }
+  .tw--sub2 { padding-left: 2.4rem; }
+  .ic { width: 15px; height: 15px; flex: none; }
+
+  .flow { background: var(--ui-bg); }
+  .flow-body { padding: 1.1rem 1.3rem 1.4rem; display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+
+  .trigger {
+    border: 1px dashed var(--ui-line); border-radius: 9px; background: transparent;
+    padding: .7rem .9rem; display: flex; align-items: center; gap: .7rem;
+  }
+  .trigger b { display: block; font-size: .84rem; color: var(--ui-ink); }
+  .trigger small { font-size: .72rem; color: var(--ui-ink-3); }
+
+  .connector { display: flex; align-items: center; gap: .7rem; padding: .55rem 0; }
+  .connector::before, .connector::after { content: ""; height: 1px; background: var(--ui-line); flex: 1; }
+  .add {
+    font-size: .7rem; color: var(--ui-ink-3); border: 1px dashed var(--ui-line);
+    border-radius: 5px; padding: .2rem .55rem; white-space: nowrap; background: var(--ui-panel);
+  }
+
+  .block { border-radius: 9px; overflow: hidden; border: 1px solid var(--ui-line); background: var(--ui-panel); }
+  .block-head {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .55rem .8rem; font-family: var(--font-mono);
+    font-size: .74rem; font-weight: 500; letter-spacing: .09em;
+  }
+  .block-head .num { margin-left: auto; color: var(--ui-ink-3); font-size: .72rem; }
+  .block-body { padding: .65rem .8rem; display: grid; grid-template-columns: 82px 1fr; gap: .3rem .6rem; font-size: .78rem; }
+  .block-body dt { color: var(--ui-ink-2); }
+  .block-body dd { margin: 0; color: var(--ui-ink); }
+
+  .b-sky   .block-head { background: var(--ui-sky-bg);   color: var(--ui-sky); }
+  .b-amber .block-head { background: var(--ui-amber-bg); color: var(--ui-amber); }
+  .b-moss  .block-head { background: var(--ui-moss-bg);  color: var(--ui-moss); }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: .35rem;
+    background: var(--ui-sky-bg); color: var(--ui-sky);
+    border-radius: 5px; padding: .25rem .5rem; font-size: .74rem;
+  }
+
+  .builder-note {
+    border-top: 1px solid var(--ui-line); background: var(--ui-panel);
+    padding: .75rem 1.3rem; font-size: .8rem; color: var(--ui-ink-2);
+    display: flex; gap: .6rem; align-items: center; flex-wrap: wrap;
+  }
+  .builder-note .mono { color: var(--ui-ink-3); }
+
+  /* ---------- sections ---------- */
+
+  section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .section-head { display: flex; flex-direction: column; gap: .85rem; margin-bottom: 2.6rem; max-width: var(--measure); }
+  .section-head p:last-child { color: var(--ink-2); }
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* ---------- steps ---------- */
+
+  .steps { display: grid; gap: 1.5rem; counter-reset: s; }
+  @media (min-width: 860px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .step { display: flex; flex-direction: column; gap: .7rem; }
+  .step-n {
+    font-family: var(--font-mono); font-size: .8rem; font-weight: 500;
+    width: 30px; height: 30px; border-radius: 8px;
+    display: grid; place-items: center;
+    background: var(--raised-2); border: 1px solid var(--line-2); color: var(--brand-2);
+  }
+  .step p { color: var(--ink-2); font-size: .96rem; }
+
+  /* ---------- features ---------- */
+
+  .feats { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+  @media (min-width: 700px)  { .feats { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .feats { grid-template-columns: repeat(3, 1fr); } }
+  .feat { background: var(--raised); padding: 1.5rem 1.4rem; display: flex; flex-direction: column; gap: .55rem; }
+  .feat p { color: var(--ink-2); font-size: .93rem; }
+
+  /* ---------- ideas ---------- */
+
+  .ideas { display: grid; border-top: 1px solid var(--line); }
+  @media (min-width: 700px)  { .ideas { grid-template-columns: repeat(2, 1fr); column-gap: 2.6rem; } }
+  @media (min-width: 1020px) { .ideas { grid-template-columns: repeat(3, 1fr); } }
+  .idea {
+    padding: 1.1rem 0; border-bottom: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: .3rem;
+  }
+  .idea h3 { font-size: .97rem; }
+  .idea p { color: var(--ink-2); font-size: .89rem; line-height: 1.55; }
+
+  /* ---------- deployment ---------- */
+
+  .deploy { display: grid; gap: 1.2rem; }
+  @media (min-width: 820px) { .deploy { grid-template-columns: 1fr 1fr; } }
+  .dep {
+    border: 1px solid var(--line-2); border-radius: 13px; background: var(--raised);
+    padding: 1.7rem 1.6rem; display: flex; flex-direction: column; gap: .8rem;
+  }
+  .dep--live { border-color: rgba(99,102,241,.45); background: linear-gradient(168deg, rgba(99,102,241,.10), transparent 55%), var(--raised); }
+  .dep-top { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+  .dep ul { margin: .3rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+  .dep li { display: flex; gap: .6rem; align-items: flex-start; color: var(--ink-2); font-size: .94rem; }
+  .dep li svg { flex: none; margin-top: .32rem; color: var(--brand-2); }
+  .dep .term {
+    margin-top: .4rem; background: var(--ground); border: 1px solid var(--line);
+    border-radius: 8px; padding: .8rem .9rem; overflow-x: auto;
+  }
+  .dep pre { margin: 0; font-family: var(--font-mono); font-size: .82rem; line-height: 1.8; color: var(--ink); }
+  .dep pre .p { color: var(--brand-2); }
+  .dep-muted { color: var(--ink-3); font-size: .9rem; }
+
+  /* ---------- licence ---------- */
+
+  .lic { display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .lic { grid-template-columns: repeat(3, 1fr); } }
+  .lic-card {
+    border: 1px solid var(--line); border-radius: 11px; background: var(--raised);
+    padding: 1.25rem 1.3rem; display: flex; flex-direction: column; gap: .4rem;
+    text-decoration: none; transition: border-color .15s ease;
+  }
+  .lic-card:hover { border-color: var(--brand-2); }
+  .lic-card .mono { color: var(--brand-2); font-weight: 500; }
+  .lic-card p { color: var(--ink-2); font-size: .9rem; }
+
+  /* ---------- footer ---------- */
+
+  footer { border-top: 1px solid var(--line); padding-block: 2.6rem 3.5rem; }
+  .foot { display: flex; justify-content: space-between; gap: 1.6rem; flex-wrap: wrap; align-items: baseline; }
+  .foot-links { display: flex; gap: 1.4rem; flex-wrap: wrap; font-size: .94rem; }
+  .foot-links a { color: var(--ink-2); text-decoration: none; }
+  .foot-links a:hover { color: var(--ink); }
+  .foot small { color: var(--ink-3); font-size: .85rem; }
+
+  .mark { border-radius: 50%; display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="#top">
+      <img class="mark" src="/assets/logo.png" width="30" height="30" alt="">
+      FaPost
+    </a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#platform">Platform</a>
+      <a href="#ideas">Ideas</a>
+      <a href="#deploy">Deploy</a>
+      <a href="https://docs.fapost.in">Docs</a>
+      <a href="https://github.com/fapost-lab/core">GitHub</a>
+    </nav>
+  </header>
+</div>
+
+<div class="wrap" id="top">
+  <div class="hero">
+    <p class="eyebrow">Open source · Apache 2.0 · Self-hosted</p>
+    <h1>
+      <span>Automate.</span>
+      <span>Communicate.</span>
+      <span class="grad">Scale.</span>
+    </h1>
+    <p class="hero-sub">
+      A platform for building intelligent bots and automating multichannel business
+      communication — without writing code. Draw the conversation, connect a channel,
+      run it on your own infrastructure.
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" href="https://docs.fapost.in/contributing/local-setup">Run it locally</a>
+      <a class="btn btn-ghost" href="https://github.com/fapost-lab/core">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg>
+        Source
+      </a>
+      <span class="dep-muted">Managed cloud <span class="soon">soon</span></span>
+    </div>
+  </div>
+
+  <!-- the constructor, as it actually looks -->
+  <div class="builder">
+    <div class="builder-scroll">
+      <div class="builder-grid">
+        <aside class="structure">
+          <div class="panel-head">STRUCTURE</div>
+          <div class="tree">
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-sky)" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/><path d="M5 15l2-3"/></svg>Send Message</div>
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2"/></svg>Loop</div>
+            <div class="tw tw--sub"><span class="dot"></span>Loop body</div>
+            <div class="tw tw--sub2"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M2 8h9M8 5l3 3-3 3"/></svg>Input</div>
+            <div class="tw tw--sub2"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><circle cx="8" cy="8" r="3"/></svg>Loop End</div>
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-moss)" stroke-width="1.5"><path d="M2 7V3h4l8 8-4 4-8-8z"/></svg>Set Tag</div>
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><path d="M8 1l6 3v4c0 4-3 6-6 7-3-1-6-3-6-7V4z"/></svg>Auth Request</div>
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M3 13h10"/></svg>Notify</div>
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M2 8h9M8 5l3 3-3 3"/></svg>Input</div>
+            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-sky)" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/></svg>Send Message</div>
+            <div class="tw tw--sub"><span class="dot"></span>Subflow</div>
+          </div>
+        </aside>
+
+        <div class="flow">
+          <div class="panel-head">MAIN FLOW</div>
+          <div class="flow-body">
+            <div class="trigger">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="var(--ui-amber)" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z"/></svg>
+              <div>
+                <b>Message trigger</b>
+                <small>1 message matcher</small>
+              </div>
+            </div>
+
+            <div class="connector"><span class="add">+ Add block</span></div>
+
+            <div class="block b-sky">
+              <div class="block-head">SEND MESSAGE <span class="num">#1</span></div>
+              <dl class="block-body">
+                <dt>Text</dt><dd>Welcome aboard — what can I help with?</dd>
+                <dt>Type</dt><dd>Text</dd>
+              </dl>
+            </div>
+
+            <div class="connector"><span class="add">+ Add block</span></div>
+
+            <div class="block b-amber">
+              <div class="block-head">LOOP <span class="num">#2</span></div>
+              <dl class="block-body">
+                <dt>Repeat</dt><dd>× <span class="mono">variable</span></dd>
+                <dt>Body</dt><dd><span class="chip">Loop body · 1 ›</span></dd>
+              </dl>
+            </div>
+
+            <div class="connector"><span class="add">+ Add block</span></div>
+
+            <div class="block b-moss">
+              <div class="block-head">SET TAG <span class="num">#3</span></div>
+            </div>
+
+            <div class="connector"><span class="add">+ Add block</span></div>
+
+            <div class="block b-amber">
+              <div class="block-head">AUTH REQUEST <span class="num">#4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="builder-note">
+      <span>Blocks stack, nest, and reorder. No canvas spaghetti, no code.</span>
+      <span class="mono">flow_definition · v1</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="how">
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>From idea to live automation in three steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-n">01</span>
+        <h3>Design your flow</h3>
+        <p>Build dialog scenarios, branching logic, and automation rules in the visual constructor — no developers needed.</p>
+      </div>
+      <div class="step">
+        <span class="step-n">02</span>
+        <h3>Connect your channels</h3>
+        <p>Plug in any messenger or communication channel. Manage every conversation from a unified workspace.</p>
+      </div>
+      <div class="step">
+        <span class="step-n">03</span>
+        <h3>Launch and optimise</h3>
+        <p>Deploy your bot, enable AI answers from your knowledge base, and track performance as it runs.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="platform">
+    <div class="section-head">
+      <p class="eyebrow">Platform</p>
+      <h2>Built for modern communication</h2>
+      <p>Everything you need to automate, engage, and scale.</p>
+    </div>
+    <div class="feats">
+      <div class="feat">
+        <h3>Visual flow builder</h3>
+        <p>Dialog scenarios with branching, conditions, loops, and subflows. Complex automation, built visually.</p>
+      </div>
+      <div class="feat">
+        <h3>Multichannel engine</h3>
+        <p>Connect any messenger or channel. One platform, one contact base, one inbox.</p>
+      </div>
+      <div class="feat">
+        <h3>AI knowledge base</h3>
+        <p>Upload documents and let retrieval answer questions automatically, with confidence scoring.</p>
+      </div>
+      <div class="feat">
+        <h3>Smart broadcasting</h3>
+        <p>Segment the audience with flexible filters, schedule campaigns, and track delivery in real time.</p>
+      </div>
+      <div class="feat">
+        <h3>Multi-bot architecture</h3>
+        <p>Run unlimited assistants for different departments or audiences, each with its own flows.</p>
+      </div>
+      <div class="feat">
+        <h3>Modular extensions</h3>
+        <p>Extend with Solutions and Plugins built against public contracts — never against Core internals.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="ideas">
+    <div class="section-head">
+      <p class="eyebrow">Ideas</p>
+      <h2>Same blocks, pointed at different problems</h2>
+      <p>None of these is a separate product. Each one is a flow, a channel, and a contact
+         list — assembled from the blocks above. Here is what teams put together first.</p>
+    </div>
+    <div class="ideas">
+      <div class="idea">
+        <h3>HR &amp; people ops</h3>
+        <p>Onboarding sequences, 360° reviews, pulse surveys, and an FAQ bot for company policy.</p>
+      </div>
+      <div class="idea">
+        <h3>Retail &amp; e-commerce</h3>
+        <p>Order status updates, product catalogues, loyalty programmes, and assisted support across channels.</p>
+      </div>
+      <div class="idea">
+        <h3>Education</h3>
+        <p>Student onboarding, assignment reminders, a Q&amp;A bot, and automated exam notifications.</p>
+      </div>
+      <div class="idea">
+        <h3>Healthcare</h3>
+        <p>Appointment reminders, symptom questionnaires, patient FAQ, and post-visit feedback.</p>
+      </div>
+      <div class="idea">
+        <h3>Real estate</h3>
+        <p>Property catalogues, viewing scheduling, lead qualification, and follow-up sequences.</p>
+      </div>
+      <div class="idea">
+        <h3>Finance &amp; banking</h3>
+        <p>Client onboarding, document collection, an FAQ bot, and transaction alerts.</p>
+      </div>
+      <div class="idea">
+        <h3>Logistics &amp; delivery</h3>
+        <p>Shipment tracking, driver communication, warehouse notifications, and delivery confirmations.</p>
+      </div>
+      <div class="idea">
+        <h3>Hospitality</h3>
+        <p>Check-in flows, a concierge bot, guest feedback collection, and upsell campaigns.</p>
+      </div>
+      <div class="idea">
+        <h3>Legal services</h3>
+        <p>Document requests, deadline reminders, client communication, and case status updates.</p>
+      </div>
+      <div class="idea">
+        <h3>IT &amp; SaaS</h3>
+        <p>Onboarding sequences, support ticket routing, incident notifications, and feedback loops.</p>
+      </div>
+      <div class="idea">
+        <h3>NGO &amp; government</h3>
+        <p>Citizen communication, event registration, community feedback, and public service automation.</p>
+      </div>
+      <div class="idea">
+        <h3>Franchises &amp; chains</h3>
+        <p>Staff training across locations, compliance checks, and multi-location broadcasts.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="deploy">
+    <div class="section-head">
+      <p class="eyebrow">Deployment</p>
+      <h2>Your infrastructure, your rules</h2>
+    </div>
+    <div class="deploy">
+      <div class="dep dep--live">
+        <div class="dep-top">
+          <h3>Self-hosted</h3>
+          <span class="soon" style="background:rgba(99,102,241,.16);color:#a5b4fc;border-color:rgba(99,102,241,.35)">available now</span>
+        </div>
+        <p style="color:var(--ink-2)">Deploy on your own servers. Complete data sovereignty, full control, no licence fee.</p>
+        <div class="term">
+          <pre><span class="p">$</span> git clone https://github.com/fapost-lab/core.git
+<span class="p">$</span> cd docker &amp;&amp; make dev</pre>
+        </div>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8.5l4 4 8-9"/></svg>Your servers, your data</li>
+          <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8.5l4 4 8-9"/></svg>Custom integrations and configuration</li>
+          <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8.5l4 4 8-9"/></svg>Compliance with local regulations</li>
+        </ul>
+      </div>
+      <div class="dep">
+        <div class="dep-top">
+          <h3>Managed cloud</h3>
+          <span class="soon">soon</span>
+        </div>
+        <p style="color:var(--ink-2)">We handle the infrastructure so you can focus on building. Same platform, none of the servers.</p>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8.5l4 4 8-9"/></svg>Ready in minutes, nothing to provision</li>
+          <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8.5l4 4 8-9"/></svg>Automatic updates and scaling</li>
+          <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8.5l4 4 8-9"/></svg>Built-in backups and monitoring</li>
+        </ul>
+        <p class="dep-muted" style="margin-top:.4rem">Not open yet — the self-hosted platform is the same code.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Open source</p>
+      <h2>Apache 2.0, patent grant included</h2>
+      <p>Build commercially on top, keep your Solution closed, fork it. What the licence adds over MIT is an
+         explicit patent grant that terminates for anyone who brings a patent suit over the software.</p>
+    </div>
+    <div class="lic">
+      <a class="lic-card" href="https://github.com/fapost-lab/core/blob/main/LICENSE">
+        <span class="mono">LICENSE</span>
+        <p>Apache 2.0 — what everyone may do with the code.</p>
+      </a>
+      <a class="lic-card" href="https://github.com/fapost-lab/core/blob/main/CLA.md">
+        <span class="mono">CLA.md</span>
+        <p>What you grant by contributing. You keep your copyright.</p>
+      </a>
+      <a class="lic-card" href="https://github.com/fapost-lab/core/blob/main/TRADEMARK.md">
+        <span class="mono">TRADEMARK.md</span>
+        <p>The licence covers the code, not the name.</p>
+      </a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="margin-bottom:.5rem">
+        <img class="mark" src="/assets/logo.png" width="26" height="26" alt="">
+        FaPost
+      </div>
+      <small>Flow Automation Post · pre-1.0, in active development</small>
+    </div>
+    <div class="foot-links">
+      <a href="https://docs.fapost.in">Documentation</a>
+      <a href="https://docs.fapost.in/self-hosting/overview">Self-hosting</a>
+      <a href="https://docs.fapost.in/extending/extension-model">Extending</a>
+      <a href="https://github.com/fapost-lab/core">GitHub</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
