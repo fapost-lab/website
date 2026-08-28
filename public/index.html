@@ -219,17 +219,31 @@
   /* Hidden only once the script has said it will animate them, so the blocks
      stay visible if it never runs. */
   @media (prefers-reduced-motion: no-preference) {
-    .builder.will-animate .anim { opacity: 0; transform: translateY(9px); }
-    .builder.will-animate .tw.anim { transform: translateX(-6px); }
+    .builder.will-animate .anim { opacity: 0; }
     .builder.is-live .anim {
-      animation: rise .46s cubic-bezier(.22,.68,.3,1) forwards;
-      animation-delay: calc(var(--i, 0) * 85ms);
+      animation: assemble 7.5s cubic-bezier(.22,.68,.3,1) infinite;
+      animation-delay: calc(var(--i, 0) * 80ms);
     }
-    .builder.is-live .tw.anim { animation-name: slide; }
+    .builder.is-live .tw.anim { animation-name: assemble-tree; }
   }
 
-  @keyframes rise  { to { opacity: 1; transform: none; } }
-  @keyframes slide { to { opacity: 1; transform: none; } }
+  /* Blocks arrive from below and leave upward, so a full cycle reads as the flow
+     being built and taken apart rather than blinking. */
+  @keyframes assemble {
+    0%,  1%  { opacity: 0; transform: translateY(10px); }
+    7%       { opacity: 1; transform: none; }
+    62%      { opacity: 1; transform: none; }
+    70%      { opacity: 0; transform: translateY(-8px); }
+    100%     { opacity: 0; transform: translateY(10px); }
+  }
+
+  @keyframes assemble-tree {
+    0%,  1%  { opacity: 0; transform: translateX(-7px); }
+    7%       { opacity: 1; transform: none; }
+    62%      { opacity: 1; transform: none; }
+    70%      { opacity: 0; transform: translateX(7px); }
+    100%     { opacity: 0; transform: translateX(-7px); }
+  }
 
   /* ---------- sections ---------- */
 
@@ -757,20 +771,21 @@
     // Only now is it safe to hide them: this line proves the script is running.
     builder.classList.add('will-animate');
 
+    // Runs while the builder is on screen and stops when it is not, so an
+    // endless loop does not keep compositing for a reader who has scrolled past.
     const io = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (entry.isIntersecting) {
-          builder.classList.add('is-live');
-          io.disconnect();
-        }
+        builder.classList.toggle('is-live', entry.isIntersecting);
       }
-    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    }, { threshold: 0.12 });
 
     io.observe(builder);
 
     // A short viewport can leave the builder below the fold indefinitely;
     // never leave it invisible for longer than a couple of seconds.
-    setTimeout(() => builder.classList.add('is-live'), 2500);
+    setTimeout(() => {
+      if (!builder.classList.contains('is-live')) builder.classList.add('is-live');
+    }, 2500);
   })();
 </script>
 </body>
