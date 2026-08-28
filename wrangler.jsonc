@@ -1,15 +1,30 @@
 {
-  // Static-assets-only Worker: there is no server-side code, so no `main` entry.
-  // Everything under public/ is uploaded and served straight from the edge.
+  // The site is static. The Worker exists for one endpoint — POST /api/subscribe —
+  // and hands everything else to the assets binding, which serves public/ from the
+  // edge without running this script.
   //
-  // The name must match the Worker the custom domain is attached to. Cloudflare
-  // named it after the repository when the project was created; a different name
-  // here would deploy to a second, unrouted Worker.
+  // The name must match the Worker the custom domain is attached to; Cloudflare
+  // named it after the repository when the project was created.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "website",
+  "main": "src/index.js",
   "compatibility_date": "2026-08-27",
   "assets": {
     "directory": "./public",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "SUBSCRIBERS",
+      "id": "660700c12b694a41b6d828cb0b6311b5"
+    }
+  ],
+  // Declared here rather than in the dashboard so the domain binding lives in the
+  // repository and survives a redeploy from any machine.
+  "routes": [
+    { "pattern": "fapost.in", "custom_domain": true }
+  ],
+  "workers_dev": true,
+  "observability": { "enabled": true }
 }
