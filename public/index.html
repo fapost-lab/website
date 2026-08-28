@@ -210,6 +210,27 @@
   }
   .builder-note .mono { color: var(--ui-ink-3); }
 
+
+  /* ---------- assembling the flow ---------- */
+
+  /* The builder is the one place motion says something: blocks arrive in the
+     order a person would add them. Everything is visible by default, so the
+     page holds up when animation is unwanted or the script never runs. */
+  /* Hidden only once the script has said it will animate them, so the blocks
+     stay visible if it never runs. */
+  @media (prefers-reduced-motion: no-preference) {
+    .builder.will-animate .anim { opacity: 0; transform: translateY(9px); }
+    .builder.will-animate .tw.anim { transform: translateX(-6px); }
+    .builder.is-live .anim {
+      animation: rise .46s cubic-bezier(.22,.68,.3,1) forwards;
+      animation-delay: calc(var(--i, 0) * 85ms);
+    }
+    .builder.is-live .tw.anim { animation-name: slide; }
+  }
+
+  @keyframes rise  { to { opacity: 1; transform: none; } }
+  @keyframes slide { to { opacity: 1; transform: none; } }
+
   /* ---------- sections ---------- */
 
   section { padding-block: clamp(3rem, 7vw, 5.5rem); }
@@ -379,24 +400,24 @@
         <aside class="structure">
           <div class="panel-head">STRUCTURE</div>
           <div class="tree">
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-sky)" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/><path d="M5 15l2-3"/></svg>Send Message</div>
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2"/></svg>Loop</div>
-            <div class="tw tw--sub"><span class="dot"></span>Loop body</div>
-            <div class="tw tw--sub2"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M2 8h9M8 5l3 3-3 3"/></svg>Input</div>
-            <div class="tw tw--sub2"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><circle cx="8" cy="8" r="3"/></svg>Loop End</div>
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-moss)" stroke-width="1.5"><path d="M2 7V3h4l8 8-4 4-8-8z"/></svg>Set Tag</div>
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><path d="M8 1l6 3v4c0 4-3 6-6 7-3-1-6-3-6-7V4z"/></svg>Auth Request</div>
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M3 13h10"/></svg>Notify</div>
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M2 8h9M8 5l3 3-3 3"/></svg>Input</div>
-            <div class="tw"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-sky)" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/></svg>Send Message</div>
-            <div class="tw tw--sub"><span class="dot"></span>Subflow</div>
+            <div class="tw anim" style="--i:1"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-sky)" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/><path d="M5 15l2-3"/></svg>Send Message</div>
+            <div class="tw anim" style="--i:2"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2"/></svg>Loop</div>
+            <div class="tw tw--sub anim" style="--i:8"><span class="dot"></span>Loop body</div>
+            <div class="tw tw--sub2 anim" style="--i:10"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M2 8h9M8 5l3 3-3 3"/></svg>Input</div>
+            <div class="tw tw--sub2 anim" style="--i:11"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><circle cx="8" cy="8" r="3"/></svg>Loop End</div>
+            <div class="tw anim" style="--i:3"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-moss)" stroke-width="1.5"><path d="M2 7V3h4l8 8-4 4-8-8z"/></svg>Set Tag</div>
+            <div class="tw anim" style="--i:4"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-amber)" stroke-width="1.5"><path d="M8 1l6 3v4c0 4-3 6-6 7-3-1-6-3-6-7V4z"/></svg>Auth Request</div>
+            <div class="tw anim" style="--i:5"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M3 13h10"/></svg>Notify</div>
+            <div class="tw anim" style="--i:6"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-ink-3)" stroke-width="1.5"><path d="M2 8h9M8 5l3 3-3 3"/></svg>Input</div>
+            <div class="tw anim" style="--i:7"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="var(--ui-sky)" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/></svg>Send Message</div>
+            <div class="tw tw--sub anim" style="--i:9"><span class="dot"></span>Subflow</div>
           </div>
         </aside>
 
         <div class="flow">
           <div class="panel-head">MAIN FLOW</div>
           <div class="flow-body">
-            <div class="trigger">
+            <div class="trigger anim" style="--i:4">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="var(--ui-amber)" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z"/></svg>
               <div>
                 <b>Message trigger</b>
@@ -404,9 +425,9 @@
               </div>
             </div>
 
-            <div class="connector"><span class="add">+ Add block</span></div>
+            <div class="connector anim" style="--i:5"><span class="add">+ Add block</span></div>
 
-            <div class="block b-sky">
+            <div class="block b-sky anim" style="--i:6">
               <div class="block-head">SEND MESSAGE <span class="num">#1</span></div>
               <dl class="block-body">
                 <dt>Text</dt><dd>Welcome aboard — what can I help with?</dd>
@@ -414,9 +435,9 @@
               </dl>
             </div>
 
-            <div class="connector"><span class="add">+ Add block</span></div>
+            <div class="connector anim" style="--i:7"><span class="add">+ Add block</span></div>
 
-            <div class="block b-amber">
+            <div class="block b-amber anim" style="--i:8">
               <div class="block-head">LOOP <span class="num">#2</span></div>
               <dl class="block-body">
                 <dt>Repeat</dt><dd>× <span class="mono">variable</span></dd>
@@ -424,15 +445,15 @@
               </dl>
             </div>
 
-            <div class="connector"><span class="add">+ Add block</span></div>
+            <div class="connector anim" style="--i:9"><span class="add">+ Add block</span></div>
 
-            <div class="block b-moss">
+            <div class="block b-moss anim" style="--i:10">
               <div class="block-head">SET TAG <span class="num">#3</span></div>
             </div>
 
-            <div class="connector"><span class="add">+ Add block</span></div>
+            <div class="connector anim" style="--i:11"><span class="add">+ Add block</span></div>
 
-            <div class="block b-amber">
+            <div class="block b-amber anim" style="--i:12">
               <div class="block-head">AUTH REQUEST <span class="num">#4</span></div>
             </div>
           </div>
@@ -721,6 +742,35 @@
         btn.disabled = false;
       }
     });
+  })();
+</script>
+
+<script>
+  // Play the assembly once, when the builder is actually on screen.
+  (() => {
+    const builder = document.querySelector('.builder');
+    if (!builder) return;
+
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still || !('IntersectionObserver' in window)) return;
+
+    // Only now is it safe to hide them: this line proves the script is running.
+    builder.classList.add('will-animate');
+
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          builder.classList.add('is-live');
+          io.disconnect();
+        }
+      }
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+    io.observe(builder);
+
+    // A short viewport can leave the builder below the fold indefinitely;
+    // never leave it invisible for longer than a couple of seconds.
+    setTimeout(() => builder.classList.add('is-live'), 2500);
   })();
 </script>
 </body>
