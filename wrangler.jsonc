@@ -21,9 +21,12 @@
     }
   ],
   // Declared here rather than in the dashboard so the domain binding lives in the
-  // repository and survives a redeploy from any machine.
+  // repository and survives a redeploy from any machine. A custom domain cannot
+  // share its hostname with another DNS record, so www must have no record of its
+  // own in the zone — Cloudflare creates it when the Worker deploys.
   "routes": [
-    { "pattern": "fapost.in", "custom_domain": true }
+    { "pattern": "fapost.in", "custom_domain": true },
+    { "pattern": "www.fapost.in", "custom_domain": true }
   ],
   "workers_dev": true,
   "observability": { "enabled": true }
