@@ -109,17 +109,6 @@
   .masthead nav { display: flex; align-items: center; gap: 1.6rem; font-size: 0.94rem; }
   .masthead nav a { color: var(--ink-2); text-decoration: none; transition: color .15s ease; }
   .masthead nav a:hover { color: var(--ink); }
-  .masthead nav a.nav-cta {
-    color: #fff; font-weight: 500; padding: 0.45rem 0.95rem; border-radius: 8px;
-    background: linear-gradient(96deg, var(--brand), var(--brand-2));
-    transition: transform .15s ease;
-  }
-  .masthead nav a.nav-cta:hover { color: #fff; transform: translateY(-1px); }
-  /* On a phone the in-page anchors would push the button off the screen: keep Docs and Sign up. */
-  @media (max-width: 640px) {
-    .masthead nav { gap: 1rem; }
-    .masthead nav a[href^="#"] { display: none; }
-  }
 
   /* ---------- hero ---------- */
 
@@ -316,8 +305,6 @@
   .dep pre { margin: 0; font-family: var(--font-mono); font-size: .82rem; line-height: 1.8; color: var(--ink); }
   .dep pre .p { color: var(--brand-2); }
   .dep-muted { color: var(--ink-3); font-size: .9rem; }
-  .dep-muted a { color: var(--ink-2); text-underline-offset: 3px; }
-  .dep-muted a:hover { color: var(--ink); }
 
 
   /* ---------- notify ---------- */
@@ -396,7 +383,6 @@
       <a href="#ideas">Ideas</a>
       <a href="#deploy">Deploy</a>
       <a href="https://docs.fapost.in">Docs</a>
-      <a class="nav-cta" href="https://app.fapost.in/signup">Sign up</a>
     </nav>
   </header>
 </div>
@@ -415,9 +401,9 @@
       run it on your own infrastructure.
     </p>
     <div class="actions">
-      <a class="btn btn-primary" href="https://app.fapost.in/signup">Create your workspace</a>
-      <a class="btn btn-ghost" href="https://docs.fapost.in/contributing/local-setup">Run it locally</a>
-      <span class="dep-muted">Source <span class="soon">soon</span> · <a href="#notify">get notified</a></span>
+      <a class="btn btn-primary" href="https://docs.fapost.in/contributing/local-setup">Run it locally</a>
+      <a class="btn btn-ghost" href="#notify">Get notified</a>
+      <span class="dep-muted">Source <span class="soon">soon</span> · managed cloud <span class="soon">soon</span></span>
     </div>
   </div>
 
@@ -720,7 +706,6 @@
       <a href="https://docs.fapost.in">Documentation</a>
       <a href="https://docs.fapost.in/self-hosting/overview">Self-hosting</a>
       <a href="https://docs.fapost.in/extending/extension-model">Extending</a>
-      <a href="https://app.fapost.in/signup">Sign up</a>
       <a href="#notify">Get notified</a>
     </div>
   </div>
