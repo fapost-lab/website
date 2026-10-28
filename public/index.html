@@ -320,44 +320,6 @@
   .dep-muted a:hover { color: var(--ink); }
 
 
-  /* ---------- notify ---------- */
-
-  .notify {
-    border: 1px solid var(--line-2); border-radius: 13px;
-    background: linear-gradient(168deg, rgba(168,85,247,.10), transparent 60%), var(--raised);
-    padding: clamp(1.6rem, 4vw, 2.4rem);
-    display: flex; flex-direction: column; gap: 1.1rem;
-  }
-  .notify h2 { max-width: 20ch; }
-  .notify > p { color: var(--ink-2); max-width: var(--measure); }
-
-  .notify-form { display: flex; flex-wrap: wrap; gap: .6rem; align-items: flex-start; }
-  .notify-form input[type=email] {
-    flex: 1 1 16rem; min-width: 0;
-    padding: .74rem .95rem; border-radius: 8px;
-    border: 1px solid var(--line-2); background: var(--ground); color: var(--ink);
-    font-family: var(--font-sans); font-size: .95rem;
-  }
-  .notify-form input[type=email]::placeholder { color: var(--ink-3); }
-  .notify-form input[type=email]:focus-visible { border-color: var(--brand-2); outline: none; }
-  .notify-form button {
-    padding: .76rem 1.3rem; border-radius: 8px; border: 0;
-    background: linear-gradient(96deg, var(--brand), var(--brand-2)); color: #fff;
-    font-family: var(--font-sans); font-size: .95rem; font-weight: 500; cursor: pointer;
-    transition: transform .15s ease, opacity .15s ease;
-  }
-  .notify-form button:hover:not(:disabled) { transform: translateY(-1px); }
-  .notify-form button:disabled { opacity: .55; cursor: default; }
-
-  /* Hidden from people, offered to bots. */
-  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-
-  .notify-msg { font-size: .92rem; min-height: 1.4em; margin: 0; }
-  .notify-msg[data-state="ok"]    { color: #86efac; }
-  .notify-msg[data-state="error"] { color: #fca5a5; }
-
-  .notify-fine { color: var(--ink-3); font-size: .85rem; }
-
   /* ---------- licence ---------- */
 
   .lic { display: grid; gap: 1rem; }
@@ -416,8 +378,8 @@
     </p>
     <div class="actions">
       <a class="btn btn-primary" href="https://app.fapost.in/signup">Create your workspace</a>
-      <a class="btn btn-ghost" href="https://docs.fapost.in/contributing/local-setup">Run it locally</a>
-      <span class="dep-muted">Source <span class="soon">soon</span> · <a href="#notify">get notified</a></span>
+      <a class="btn btn-ghost" href="https://docs.fapost.in/self-hosting/overview">Self-host it</a>
+      <span class="dep-muted"><a href="https://docs.fapost.in/contributing/local-setup">Source and developer docs</a></span>
     </div>
   </div>
 
@@ -664,31 +626,6 @@
 
   <hr class="rule">
 
-  <section id="notify">
-    <div class="notify">
-      <p class="eyebrow">Not public yet</p>
-      <h2>Be told when the source opens</h2>
-      <p>
-        The platform runs, the licence is decided, and the documentation is already
-        published. The repository itself is still closed while the first release is
-        prepared. Leave an address and you will hear once — when it opens.
-      </p>
-      <form class="notify-form" id="notify-form" novalidate>
-        <label class="trap" aria-hidden="true">
-          Company <input type="text" name="company" tabindex="-1" autocomplete="off">
-        </label>
-        <label class="trap" for="notify-email">Email address</label>
-        <input id="notify-email" type="email" name="email" required
-               placeholder="you@company.com" autocomplete="email" spellcheck="false">
-        <button type="submit">Notify me</button>
-      </form>
-      <p class="notify-msg" id="notify-msg" role="status" aria-live="polite"></p>
-      <p class="notify-fine">One email, nothing else. No newsletter, no sharing with anyone.</p>
-    </div>
-  </section>
-
-  <hr class="rule">
-
   <section>
     <div class="section-head">
       <p class="eyebrow">Open source</p>
@@ -727,58 +664,9 @@
       <a href="https://docs.fapost.in/self-hosting/overview">Self-hosting</a>
       <a href="https://docs.fapost.in/extending/extension-model">Extending</a>
       <a href="https://app.fapost.in/signup">Sign up</a>
-      <a href="#notify">Get notified</a>
     </div>
   </div>
 </footer>
-
-<script>
-  (() => {
-    const form = document.getElementById('notify-form');
-    const msg  = document.getElementById('notify-msg');
-    const btn  = form.querySelector('button');
-
-    const say = (text, state) => { msg.textContent = text; msg.dataset.state = state; };
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const data = new FormData(form);
-      const email = String(data.get('email') || '').trim();
-
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-        say('That does not look like an email address.', 'error');
-        return;
-      }
-
-      btn.disabled = true;
-      say('', '');
-
-      try {
-        const res = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            company: data.get('company') || '',
-            ref: document.referrer || '',
-          }),
-        });
-        const body = await res.json();
-
-        if (res.ok) {
-          say(body.already ? 'You are already on the list.' : 'Done. You will hear from us once.', 'ok');
-          form.reset();
-        } else {
-          say(body.error || 'That did not go through. Try again in a moment.', 'error');
-          btn.disabled = false;
-        }
-      } catch {
-        say('Could not reach the server. Try again in a moment.', 'error');
-        btn.disabled = false;
-      }
-    });
-  })();
-</script>
 
 <script>
   // Play the assembly once, when the builder is actually on screen.
