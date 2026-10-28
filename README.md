@@ -10,7 +10,8 @@ the only external request is Google Fonts.
 
 ```
 public/          everything that gets served
-wrangler.jsonc   deployment config — assets only, no server code
+src/index.js     the Worker: redirects /signup to the managed cloud, serves everything else from public/
+wrangler.jsonc   deployment config
 ```
 
 ## Local preview
