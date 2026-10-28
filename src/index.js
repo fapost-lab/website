@@ -1,10 +1,12 @@
 /**
- * The site is static; this Worker exists for one endpoint.
+ * The site is static; this Worker exists for one endpoint and one redirect (/signup).
  *
- * Everything except POST /api/subscribe falls through to the assets binding,
+ * Everything except POST /api/subscribe and /signup falls through to the assets binding,
  * so index.html, the 404 page and the images are still served from the edge
  * without this script doing any work.
  */
+
+const SIGNUP_URL = 'https://app.fapost.in/signup';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -21,6 +23,11 @@ const json = (body, status = 200) =>
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // The managed cloud lives on its own host; /signup here is only a shortcut to it.
+    if (url.pathname === '/signup') {
+      return Response.redirect(SIGNUP_URL, 302);
+    }
 
     if (url.pathname !== '/api/subscribe') {
       return env.ASSETS.fetch(request);
