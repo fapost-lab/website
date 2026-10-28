@@ -1,7 +1,7 @@
 {
-  // The site is static. The Worker exists for one endpoint — POST /api/subscribe —
-  // and hands everything else to the assets binding, which serves public/ from the
-  // edge without running this script.
+  // The site is static. The Worker exists for one redirect (/signup) and hands
+  // everything else to the assets binding, which serves public/ from the edge
+  // without running this script.
   //
   // The name must match the Worker the custom domain is attached to; Cloudflare
   // named it after the repository when the project was created.
@@ -14,12 +14,6 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page"
   },
-  "kv_namespaces": [
-    {
-      "binding": "SUBSCRIBERS",
-      "id": "660700c12b694a41b6d828cb0b6311b5"
-    }
-  ],
   // Declared here rather than in the dashboard so the domain binding lives in the
   // repository and survives a redeploy from any machine. A custom domain cannot
   // share its hostname with another DNS record, so www must have no record of its
