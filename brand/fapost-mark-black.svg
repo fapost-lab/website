@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="FaPost">
+  
+  <mask id="cut" maskUnits="userSpaceOnUse" x="-512" y="-512" width="1536" height="1536">
+    <rect x="-512" y="-512" width="1536" height="1536" fill="#fff"/>
+    <g transform="translate(-18 -5)">
+      <path d="M226 242 C226 220 252 204 288 204 C300 204 310 201 317 196" fill="none" stroke="#000" stroke-width="28" stroke-linecap="round"/>
+      <path d="M226 282 V340" fill="none" stroke="#000" stroke-width="28" stroke-linecap="round"/>
+      <circle cx="226" cy="262" r="28" fill="#000"/><circle cx="330" cy="182" r="28" fill="#000"/><circle cx="226" cy="340" r="28" fill="#000"/>
+    </g>
+  </mask>
+  <g transform="translate(256 256) scale(1) translate(-256 -256)">
+  <g mask="url(#cut)">
+    <g transform="translate(-18 -5)">
+      <path d="M150 252 C150 168 210 112 294 112 H414 L388 160 C379 176 364 184 346 184 H298 C224 184 170 206 150 252 Z" fill="#000"/>
+      <path d="M246 298 C246 264 270 242 304 242 H394 L370 282 C362 294 350 298 336 298 Z" fill="#000"/>
+      <path d="M150 270 C164 252 188 244 214 244 V340 C214 380 186 410 150 410 Z" fill="#000"/>
+    </g>
+  </g>
+  <g transform="translate(-18 -5)">
+    <path d="M226 242 C226 220 252 204 288 204 C300 204 310 201 317 196" fill="none" stroke="#000" stroke-width="10" stroke-linecap="round"/>
+    <path d="M226 282 V340" fill="none" stroke="#000" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="226" cy="262" r="14" fill="none" stroke="#000" stroke-width="10"/><circle cx="330" cy="182" r="14" fill="none" stroke="#000" stroke-width="10"/><circle cx="226" cy="340" r="19" fill="#000"/>
+  </g>
+  </g>
+</svg>
