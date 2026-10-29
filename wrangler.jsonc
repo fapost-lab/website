@@ -1,6 +1,7 @@
 {
-  // The site is static. The Worker exists for one redirect (/signup) and hands
-  // everything else to the assets binding, which serves public/ from the edge
+  // The site is static. The Worker exists for one redirect (/signup) and for the
+  // blog, which it hands to the `blog` Worker (repository fapost-lab/blog); every
+  // other request goes to the assets binding, which serves public/ from the edge
   // without running this script.
   //
   // The name must match the Worker the custom domain is attached to; Cloudflare
@@ -14,6 +15,10 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page"
   },
+  // The blog is its own Worker with no public route; fapost.in/blog reaches it only
+  // through this binding. The `blog` Worker must exist before this one deploys, and
+  // public/ must never hold a blog/ folder: a matching file is served before the script.
+  "services": [{ "binding": "BLOG", "service": "blog" }],
   // Declared here rather than in the dashboard so the domain binding lives in the
   // repository and survives a redeploy from any machine. A custom domain cannot
   // share its hostname with another DNS record, so www must have no record of its
