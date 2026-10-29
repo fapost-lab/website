@@ -13,11 +13,15 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // Paths the script answers. Without this list a browser navigation that matches
+    // no file is answered with the 404 page before the script runs, so /signup and
+    // /blog would work for curl and fail in a browser. A path handled in
+    // src/index.js must be listed here.
+    "run_worker_first": ["/signup", "/blog", "/blog/*"]
   },
   // The blog is its own Worker with no public route; fapost.in/blog reaches it only
-  // through this binding. The `blog` Worker must exist before this one deploys, and
-  // public/ must never hold a blog/ folder: a matching file is served before the script.
+  // through this binding. The `blog` Worker must exist before this one deploys.
   "services": [{ "binding": "BLOG", "service": "blog" }],
   // Declared here rather than in the dashboard so the domain binding lives in the
   // repository and survives a redeploy from any machine. A custom domain cannot
