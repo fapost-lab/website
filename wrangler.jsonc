@@ -1,5 +1,5 @@
 {
-  // The site is static. The Worker exists for one redirect (/signup) and for the
+  // The site is static. The Worker exists for two redirects (/signup, /solutions) and for the
   // blog, which it hands to the `blog` Worker (repository fapost-lab/blog); every
   // other request goes to the assets binding, which serves public/ from the edge
   // without running this script.
@@ -18,7 +18,7 @@
     // no file is answered with the 404 page before the script runs, so /signup and
     // /blog would work for curl and fail in a browser. A path handled in
     // src/index.js must be listed here.
-    "run_worker_first": ["/signup", "/blog", "/blog/*"]
+    "run_worker_first": ["/signup", "/solutions", "/blog", "/blog/*"]
   },
   // The blog is its own Worker with no public route; fapost.in/blog reaches it only
   // through this binding. The `blog` Worker must exist before this one deploys.

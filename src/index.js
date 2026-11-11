@@ -1,6 +1,6 @@
 /**
- * The site is static; this Worker exists for one redirect (/signup) and to hand
- * /blog to the blog's own Worker.
+ * The site is static; this Worker exists for two redirects (/signup, /solutions) and
+ * to hand /blog to the blog's own Worker.
  *
  * Everything else falls through to the assets binding, so index.html, the 404
  * page and the images are still served from the edge without this script doing
@@ -9,6 +9,10 @@
 
 const SIGNUP_URL = 'https://app.fapost.in/signup';
 
+// Core links here from its admin Solutions page, so the address stays stable in every
+// installed copy while the directory itself can move: change only this target.
+const SOLUTIONS_URL = 'https://docs.fapost.in/self-hosting/solutions-directory';
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -16,6 +20,10 @@ export default {
     // The managed cloud lives on its own host; /signup here is only a shortcut to it.
     if (url.pathname === '/signup') {
       return Response.redirect(SIGNUP_URL, 302);
+    }
+
+    if (url.pathname === '/solutions') {
+      return Response.redirect(SOLUTIONS_URL, 302);
     }
 
     // The blog is a separate site (fapost-lab/blog) built under /blog, so the request
